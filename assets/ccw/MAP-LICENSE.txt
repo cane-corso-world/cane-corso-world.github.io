@@ -1,0 +1,1 @@
+Italy regional outlines derived and simplified from openpolis / guglielmo geojson-italy, limits_IT_regions.geojson. Source: https://github.com/guglielmo/geojson-italy (downloaded 2026-11-04 via former openpolis URL). CC BY 4.0 https://creativecommons.org/licenses/by/4.0/ . Projection and simplification changed for this educational SVG. Not a navigation map.
