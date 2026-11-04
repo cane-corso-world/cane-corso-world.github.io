@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cane Corso Weight by Age: Owner Reports vs Charts</title>
+<meta name="description" content="Compare Cane Corso weight by age using owner-reported male and female weights, breeder charts, source notes, and a checker that shows the limits of the data." />
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cane-corso-world.github.io/cane-corso-weight-age.html">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Consolas', 'Monaco', monospace; background: #f5f7fb; color: #1f2937; line-height: 1.72; }
+  a { color: #450a0a; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .topbar { background: #450a0a; box-shadow: 0 2px 8px rgba(0,0,0,0.14); }
+  .topbar-inner { max-width: 1120px; margin: 0 auto; padding: 0 22px; min-height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .brand { color: #fff; font-weight: 700; font-size: 1.04rem; }
+  .nav { display: flex; gap: 14px; flex-wrap: wrap; }
+  .nav a { color: rgba(255,255,255,0.92); font-size: 0.9rem; }
+  .hero { background: linear-gradient(135deg, #450a0a 0%, #991b1b 100%); color: #fff; }
+  .hero-inner { max-width: 1120px; margin: 0 auto; padding: 34px 22px; }
+  .hero p { margin: 0 0 10px; opacity: 0.86; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.75rem; }
+  .hero h1 { margin: 0 0 10px; font-size: 2.15rem; line-height: 1.12; max-width: 820px; }
+  .hero .lead { margin: 0; max-width: 760px; font-size: 1.02rem; text-transform: none; letter-spacing: 0; opacity: 0.92; }
+  .layout { max-width: 1120px; margin: 28px auto 48px; padding: 0 22px; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 26px; align-items: start; }
+  .article { background: #fff; border-radius: 14px; padding: 30px; box-shadow: 0 1px 8px rgba(0,0,0,0.08); }
+  .article .meta { color: #6b7280; font-size: 0.9rem; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid #e5e7eb; }
+  .article h2 { color: #0f172a; font-size: 1.45rem; margin: 34px 0 14px; line-height: 1.24; }
+  .article h3 { color: #450a0a; font-size: 1.08rem; margin: 22px 0 10px; }
+  .article p, .article li { color: #374151; }
+  .article ul, .article ol { padding-left: 22px; margin: 12px 0 18px; }
+  .article table { width: 100%; border-collapse: collapse; margin: 20px 0 26px; font-size: 0.95rem; }
+  .article th { text-align: left; background: #eef2ff; color: #0f172a; padding: 12px 14px; border: 1px solid #dbe2ea; }
+  .article td { padding: 12px 14px; border: 1px solid #dbe2ea; vertical-align: top; }
+  .article blockquote { margin: 20px 0; padding: 16px 18px; border-left: 4px solid #450a0a; background: #f8fafc; color: #334155; }
+  details { border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px 16px; margin: 10px 0; background: #fafafa; }
+  summary { cursor: pointer; font-weight: 600; color: #0f172a; }
+  .sidebar { display: grid; gap: 18px; position: sticky; top: 18px; }
+  .sidebar-panel { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 8px rgba(0,0,0,0.08); }
+  .sidebar-panel h3 { margin: 0 0 10px; color: #0f172a; font-size: 1rem; }
+  .sidebar-panel p, .sidebar-panel li { color: #4b5563; font-size: 0.92rem; }
+  .sidebar-panel ul { margin: 0; padding-left: 18px; }
+  .sidebar-newsletter { background: linear-gradient(135deg, #450a0a 0%, #991b1b 100%); }
+  .sidebar-newsletter h3, .sidebar-newsletter p { color: #fff; }
+  .sidebar-newsletter input { width: 100%; padding: 10px 12px; border: 0; border-radius: 6px; margin: 10px 0 8px; }
+  .sidebar-newsletter button { width: 100%; padding: 10px 12px; border: 0; border-radius: 6px; background: #fff; color: #450a0a; font-weight: 700; cursor: pointer; }
+  .footer { background: #0f172a; color: rgba(255,255,255,0.74); }
+  .footer-inner { max-width: 1120px; margin: 0 auto; padding: 22px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 0.87rem; }
+  .footer a { color: rgba(255,255,255,0.9); }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+    .hero h1 { font-size: 1.74rem; }
+  }
+
+  .article-breadcrumb { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 12px; color: #6b7280; font-size: 0.88rem; }
+  .article-breadcrumb a { color: #6b7280; }
+  .article-breadcrumb span[aria-current="page"] { color: #374151; font-weight: 600; }
+
+</style>
+
+
+
+<style id="sidebar-follow-20261025">
+[data-follow-sidebar]{display:grid!important;gap:16px;position:sticky!important;top:96px!important;align-self:start!important;
+height:fit-content!important;max-height:calc(100dvh - 112px)!important;overflow-y:auto!important;
+min-width:0;overscroll-behavior:contain;scrollbar-width:thin}
+[data-follow-parent]{overflow:visible!important;align-items:start}
+.follow-sidebar-layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:32px;
+width:min(1184px,calc(100% - 32px));margin:32px auto;align-items:start}
+[data-follow-content]{width:auto!important;max-width:100%!important;min-width:0;margin:0!important}
+.follow-sidebar-panel{padding:18px;border:1px solid var(--line,#d8d9d0);border-radius:12px;
+background:var(--soft,#f4f5ef);color:var(--ink,#27382d);margin:0 0 16px}
+.follow-sidebar-panel h2{font:700 .85rem/1.4 system-ui;margin:0 0 12px}
+.follow-sidebar-panel ul{list-style:none;margin:0;padding:0}
+.follow-sidebar-panel a{display:block;padding:8px 0;color:inherit;text-decoration:underline;
+overflow-wrap:anywhere;line-height:1.45}
+@media(max-width:900px){[data-follow-sidebar]{position:static!important;top:auto!important;
+max-height:none!important;height:auto!important;overflow:visible!important;width:100%!important;max-width:100%;float:none!important}
+.follow-sidebar-layout{grid-template-columns:minmax(0,1fr);gap:24px}}
+</style>
+
+<!-- social-cards:start -->
+<meta property="og:title" content="Cane Corso Weight by Age: Owner Reports vs Charts">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://cane-corso-world.github.io/cane-corso-weight-age.html">
+<meta property="og:description" content="Compare Cane Corso weight by age using owner-reported male and female weights, breeder charts, source notes, and a checker that shows the limits of the data.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cane Corso Weight by Age: Owner Reports vs Charts">
+<meta name="twitter:description" content="Compare Cane Corso weight by age using owner-reported male and female weights, breeder charts, source notes, and a checker that shows the limits of the data.">
+<!-- social-cards:end -->
+<style>.hero-inner.with-photo{display:grid;grid-template-columns:minmax(0,1fr) 300px;column-gap:48px;grid-template-rows:auto auto 1fr;align-items:start}.hero-inner.with-photo>*{grid-column:1}.hero-inner.with-photo>.hero-photo{grid-column:2;grid-row:1/span 3;margin:0;align-self:center}.hero-photo img{display:block;width:100%;height:auto;border-radius:8px}.hero-photo figcaption{font-size:11px;color:inherit;opacity:.75;margin-top:4px}@media(max-width:860px){.hero-inner.with-photo{display:block}.hero-photo{display:none}}</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Cane Corso Weight by Age: Male and Female Owner Reports", "description": "Compare Cane Corso weight by age using owner-reported male and female weights, breeder charts, source notes, and a checker that shows the limits of the data.", "datePublished": "2026-11-04", "dateModified": "2026-11-04", "author": {"@type": "Person", "name": "Marco Bellini"}, "publisher": {"@type": "Organization", "name": "Cane Corso World"}, "mainEntityOfPage": "https://cane-corso-world.github.io/cane-corso-weight-age.html"}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does a four-month-old Cane Corso weigh?", "acceptedAnswer": {"@type": "Answer", "text": "The selected owner reports include females at 54, about 56, and 75 lb, and males at 45\u201350 and 80 lb. These are a small convenience sample, not a recommended range. The unusually wide spread is a reason to check the source and measurement rather than choose a target from the heaviest reply."}}, {"@type": "Question", "name": "Are male and female weights interchangeable?", "acceptedAnswer": {"@type": "Answer", "text": "Keep them separate when a source provides separate values. The Italian reference table lists different male and female figures, whereas the Royal puppy chart pools sexes. Our owner dataset also has many more female observations, so its pooled numbers would give a misleading comparison."}}, {"@type": "Question", "name": "Can the calculator predict my puppy\u2019s adult weight?", "acceptedAnswer": {"@type": "Answer", "text": "No. It compares the entered weight with observations in this article at the selected age and sex. It does not fit a growth curve, estimate an adult weight, calculate a population percentile, or tell you what your dog should weigh."}}, {"@type": "Question", "name": "Why are some ages missing?", "acceptedAnswer": {"@type": "Answer", "text": "An empty age-sex group means no qualifying report was included, not that a dog cannot weigh that amount. We did not fill gaps with invented values or interpolate between different dogs. Several replies lacked an age, a sex, or a usable measurement."}}, {"@type": "Question", "name": "Does a three-year-old report prove when growth stops?", "acceptedAnswer": {"@type": "Answer", "text": "No. A measurement at three years describes that dog at that time. It does not show when the dog reached that weight. Establishing a stopping point requires repeated measurements of the same dog, with dates and a consistent weighing method."}}, {"@type": "Question", "name": "Should I buy equipment from a weight table?", "acceptedAnswer": {"@type": "Answer", "text": "Use the measurements required by that exact item. Weight alone does not give body length, standing height, or muzzle dimensions. Keep a separate measurement log and use the appropriate fitting guide rather than converting pounds into a universal size."}}]}</script><style>article.article a{color:#0066cc}article.article a:visited{color:#0052a3}article.article a:hover{text-decoration:underline}</style><style id="site-chrome">
+:where(body){margin:0}.sc-reset,header.sc-topbar,footer.sc-footer{box-sizing:border-box}
+[class*="wrap"],[class*="inner"],[class*="layout"],[class*="container"]{box-sizing:border-box}
+/* ── Top bar ── */
+  .sc-topbar{
+    background: #450a0a;
+    color: #fff;
+    padding: 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  }
+.sc-topbar-inner{
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+  }
+.sc-topbar-brand{
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.01em;
+  }
+.sc-topbar-nav{
+    display: flex;
+    gap: 4px;
+    list-style: none;
+  }
+.sc-topbar-nav a{
+    color: rgba(255,255,255,0.88);
+    font-size: 0.88rem;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+.sc-topbar-nav a:hover{
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    text-decoration: none;
+  }
+@media(max-width:600px) {
+    .sc-topbar-nav { display: none; }}
+/* ── Footer ── */
+  .sc-footer{
+    background: #370808;
+    color: rgba(255,255,255,0.75);
+    text-align: center;
+    padding: 24px 16px;
+    font-size: 0.82rem;
+    margin-top: 40px;
+  }
+.sc-footer-nav{ margin-bottom: 8px; }
+.sc-footer-nav a{
+    color: rgba(255,255,255,0.85);
+    margin: 0 10px;
+    font-size: 0.85rem;
+  }
+.reset,header.sc-topbar,footer.sc-footer{box-sizing:border-box}
+/* ── Top bar ── */
+  .sc-topbar{
+    background: #450a0a;
+    color: #fff;
+    padding: 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  }
+.sc-topbar-inner{
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+  }
+.sc-topbar-brand{
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.01em;
+  }
+.sc-topbar-nav{
+    display: flex;
+    gap: 4px;
+    list-style: none;
+  }
+.sc-topbar-nav a{
+    color: rgba(255,255,255,0.88);
+    font-size: 0.88rem;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+.sc-topbar-nav a:hover{
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    text-decoration: none;
+  }
+@media(max-width:600px) {
+    .sc-topbar-nav { display: none; }}
+/* ── Footer ── */
+  .sc-footer{
+    background: #370808;
+    color: rgba(255,255,255,0.75);
+    text-align: center;
+    padding: 24px 16px;
+    font-size: 0.82rem;
+    margin-top: 40px;
+  }
+.sc-footer-nav{ margin-bottom: 8px; }
+.sc-footer-nav a{
+    color: rgba(255,255,255,0.85);
+    margin: 0 10px;
+    font-size: 0.85rem;
+  }
+.sc-topbar a,.sc-footer a{text-decoration:none}
+/* links blue: the most recognisable clickable colour (owner 2026-10-13); not the bar, footer, buttons or cards */
+a:not(.sc-topbar *):not(.sc-footer *):not(header *):not(footer *):not([class*="button"]):not([class*="btn"]):not([class*="-card"]):not([class*="badge"]):not(.sidebar-link):not(.sc-topbar-brand):not([style*="background"]){color:#0066cc!important}a:not(.sc-topbar *):not(.sc-footer *):not(header *):not(footer *):not([class*="button"]):not([class*="btn"]):not([class*="-card"]):not([class*="badge"]):not(.sidebar-link):not(.sc-topbar-brand):not([style*="background"]):visited{color:#0052a3!important}a:not(.sc-topbar *):not(.sc-footer *):not(header *):not(footer *):not([class*="button"]):not([class*="btn"]):not([class*="-card"]):not([class*="badge"]):not(.sidebar-link):not(.sc-topbar-brand):not([style*="background"]):hover{text-decoration:underline}
+/* site name always readable on the bar, whatever the article CSS does with links (owner 2026-10-13) */
+.sc-topbar .sc-topbar-brand,.sc-topbar .sc-topbar-brand:visited,.sc-topbar .sc-topbar-brand:hover{color:#fff!important}
+.sc-topbar a,.sc-footer a{text-decoration:none}
+@media(max-width:700px){header[class^="sc-"] [class*="inner"],header[class^="sc-"]{flex-wrap:wrap;height:auto}header[class^="sc-"] nav,header[class^="sc-"] [class*="nav"]{display:flex;flex-wrap:wrap;gap:6px 14px}header[class^="sc-"] [class*="inner"]{padding-top:8px;padding-bottom:8px}main,article,aside,[class*="wrap"]>*,[class*="layout"]>*,[class*="content"],[class*="column"]{min-width:0!important;max-width:100%}table{display:block!important;width:auto!important;max-width:100%!important;overflow-x:auto}img,iframe,video{max-width:100%;height:auto}h1,h2,h3,p,li{overflow-wrap:anywhere}[class*="wrap"],[class*="layout"],[class*="rich"],[class*="content"]{grid-template-columns:minmax(0,1fr)!important}article *,[class*="content"] *,[class*="rich"] *{box-sizing:border-box!important;max-width:100%!important;min-width:0!important}table{overflow-x:auto!important}}
+</style>
+<style id="sc-font">body{font-family:'Consolas', 'Monaco', monospace}body h1,body h2,body h3{font-family:'Consolas', 'Monaco', monospace}</style>
+<style id="sc-corso-design">
+:root{--p:#f3efe8;--i:#24211e;--m:#635b50;--l:#dfd6c8;--d:#24211e;--od:#f1e9dc;--a:#b08d57;--ai:#6e5326;--card:#fbf8f3;--bar:#24211e;--bart:#f1e9dc;--r:0px;--hf:'Palatino Linotype',Palatino,'Book Antiqua',serif;--bf:'Gill Sans','Segoe UI',Arial,sans-serif;--p2:#e8dfd1}
+body{background:var(--p)!important;color:var(--i);font-family:var(--bf)!important}html body :is(h1,h2,h3,h4){font-family:var(--hf)!important}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--ai);outline-offset:3px}
+header.sc-topbar{background:var(--bar)!important;color:var(--bart);box-shadow:none;border-bottom:3px solid var(--a);position:sticky;top:0;z-index:100}
+header.sc-topbar .sc-topbar-inner{max-width:1240px;height:auto;min-height:68px;padding:10px 28px;gap:18px}
+header.sc-topbar a.sc-topbar-brand:is(#_,a),header.sc-topbar a.sc-topbar-brand:is(#_,a):visited{color:var(--bart)!important;font:800 1.4rem/1.1 var(--hf);letter-spacing:-.02em;text-transform:none}
+header.sc-topbar .sc-topbar-nav{gap:2px;margin:0;padding:0;flex-wrap:wrap}
+header.sc-topbar .sc-topbar-nav a{display:block;color:var(--bart);padding:10px 13px;min-height:44px;border-radius:var(--r);font-weight:600;font-size:.86rem}
+header.sc-topbar .sc-topbar-nav a:hover,header.sc-topbar .sc-topbar-nav a[aria-current="page"]{background:var(--bart);color:var(--bar);text-decoration:none}
+.breadcrumb{background:transparent!important;border:0!important}.breadcrumb-inner{max-width:1240px!important;margin:0 auto;padding:14px 28px;font-size:.78rem;color:var(--m)}
+.sd-cover{position:relative;max-width:1184px;margin:6px auto 34px;overflow:hidden;border-radius:var(--r)}
+.sd-cover h1{font-size:clamp(2.4rem,5vw,4.4rem);line-height:1.04;letter-spacing:-.03em;margin:0 0 18px;color:inherit;text-transform:none;text-wrap:balance}
+.sd-cover .intro{font-size:1.06rem;line-height:1.75;margin:0 0 20px;max-width:46ch;color:inherit;opacity:.88}
+.sd-cover .categories{display:flex;flex-wrap:wrap;gap:8px;margin:0}
+.sd-cover .cat-tag{border-radius:var(--r);padding:7px 12px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--card);color:var(--ai);border:1px solid var(--a)}
+.sd-art{min-height:220px;background:repeating-radial-gradient(circle at 70% 60%,#b08d57 0 6px,transparent 6px 22px)}
+.page-wrap{max-width:1240px;margin:0 auto;padding:0 28px 56px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:32px;align-items:start}
+.main-content{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-content:start;background:transparent!important;box-shadow:none!important;padding:0!important;border:0!important}
+.main-content>:not(article){grid-column:1/-1}
+.main-content>article{position:relative;min-width:0;margin:0!important;padding:26px!important;background:var(--card)!important;border:1px solid var(--l)!important;border-radius:var(--r)!important;box-shadow:none;transition:transform .15s,box-shadow .15s}
+.main-content>article h2{font-size:1.3rem!important;line-height:1.25!important;margin:0 0 12px!important}
+.main-content>article h2 a::after{content:"";position:absolute;inset:0}
+.main-content>article p{color:var(--m)!important;font-size:.92rem!important;line-height:1.7}
+.main-content>article p:first-of-type{color:var(--ai)!important;font-size:.72rem!important;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.sidebar :is(.sidebar-about,.sidebar-links,.sidebar-panel){background:var(--card)!important;border:1px solid var(--l)!important;border-radius:var(--r)!important;box-shadow:none!important}
+.sidebar :is(h3,h4){color:var(--ai)!important;font-size:.76rem!important;letter-spacing:.1em;text-transform:uppercase}
+.sidebar-about strong{color:var(--i)}
+.hero{background:#24211e!important;color:#f1e9dc!important;border-bottom:4px solid var(--a)}
+.hero h1{color:#f1e9dc!important;letter-spacing:-.02em;text-transform:none}.hero p{color:#f1e9dc!important;opacity:.9}
+.layout{max-width:1240px!important}.hero-inner{max-width:1240px!important;padding-left:22px;padding-right:22px}
+.article,article.article{background:var(--card)!important;border:1px solid var(--l);border-radius:var(--r)!important;box-shadow:none!important}
+.article h2{color:var(--i);border-bottom:2px solid var(--a);padding-bottom:6px}.article h3{color:var(--i)}
+.article th{background:var(--p2)!important;color:var(--i)!important}
+.article blockquote{border-left:4px solid var(--a);background:var(--p2);margin:22px 0;padding:14px 20px}
+.wrap .panel{background:var(--card)!important;border:1px solid var(--l);border-top:5px solid var(--a);border-radius:var(--r)!important;box-shadow:none!important}
+.wrap .panel h1{color:var(--i);text-transform:none}
+footer.sc-footer{background:var(--d)!important;color:var(--od)!important;border-top:6px solid var(--a);padding:34px 20px;margin-top:48px}
+footer.sc-footer a{color:var(--od)!important;display:inline-block;padding:10px 4px}
+
+.sd-cover{text-align:center;padding:46px 28px 0;border-top:6px double var(--i);border-bottom:1px solid var(--l);border-radius:0}
+.sd-cover h1{color:var(--i)}.sd-cover .intro{color:var(--m);opacity:1;margin:0 auto 20px}.sd-cover .categories{justify-content:center;margin-bottom:34px}
+.sd-art{min-height:22px;margin:0 -28px 26px;background:radial-gradient(circle,var(--a) 4px,transparent 5px) 0 50%/26px 22px repeat-x}
+.main-content{grid-template-columns:minmax(0,1fr);gap:0;counter-reset:sd}
+.main-content>article{counter-increment:sd;background:transparent!important;border:0!important;border-bottom:1px solid var(--l)!important;border-radius:0!important;padding:24px 0 24px 84px!important}
+.main-content>article::before{content:counter(sd,decimal-leading-zero);position:absolute;left:0;top:18px;font:800 2.6rem/1 var(--hf);color:var(--a)}
+.main-content>article:first-of-type h2{font-size:1.8rem!important}
+.main-content>article:hover{background:var(--p2)!important}
+@media(max-width:900px){.page-wrap{grid-template-columns:minmax(0,1fr)!important}.main-content{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){header.sc-topbar .sc-topbar-inner{display:block;padding:14px 16px}header.sc-topbar a.sc-topbar-brand:is(#_,a){display:block;margin-bottom:10px}
+header.sc-topbar nav{display:block!important}header.sc-topbar .sc-topbar-nav{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px}header.sc-topbar .sc-topbar-nav a{padding:11px 2px;text-align:center;font-size:.8rem}
+.breadcrumb-inner{padding:12px 16px}.sd-cover{display:block!important;margin:4px 16px 26px;padding:0}.sd-cover-text,.sd-cover.sd-centered{padding:30px 22px}
+.sd-cover h1{font-size:2.4rem}.sd-art{min-height:90px;margin:0;box-shadow:none}
+.sidebar{display:grid!important;position:static!important;gap:16px;margin-top:24px}aside[class*="sidebar"]:not(.sidebar){display:block!important;position:static!important;margin-top:24px}.page-wrap{padding:0 16px 40px}.main-content{grid-template-columns:minmax(0,1fr)!important}.main-content>article{padding:22px!important}.main-content>article:first-of-type h2{font-size:1.5rem!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="sc-topbar">
+  <div class="sc-topbar-inner">
+    <a class="sc-topbar-brand" href="/">Cane Corso Guide</a>
+    <nav>
+      <ul class="sc-topbar-nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog.html" aria-current="page">Blog</a></li>
+        <li><a href="/care.html">Care</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+        <li><a href="/sitemap.html">Sitemap</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+
+
+
+
+
+
+
+<section class="hero">
+  <div class="hero-inner">
+    <p>Cane Corso owner notes</p>
+    <h1>Cane Corso Weight by Age: Male and Female Owner Reports</h1>
+    <p class="lead">Real owner observations, published growth references, and a transparent comparison tool.</p>
+    
+  </div>
+</section>
+<div class="layout" data-follow-parent="true">
+  <article class="article"><p>Reading a Cane Corso weight by age chart is easy; deciding whether its numbers describe real dogs is harder. This comparison separates owner-reported male and female weights from published breeder estimates, preserving approximate ages and ranges instead of turning every reply into a precise measurement.</p>
+<blockquote><strong>Quick answer:</strong> the owner reports vary substantially, including within the same age and sex. Use them as examples, not targets: this article compares 35 observations from two discussion threads with two published reference charts, and shows exactly where the evidence is thin.</blockquote>
+<section aria-label="Owner report comparison tool" style="border:2px solid #450a0a;padding:18px;border-radius:10px">
+<strong>Where does my dog sit among these reports?</strong><p>Choose an age actually represented in the data. Approximate reports are included only when you select that option. This compares anecdotes, not a breed-wide percentile.</p>
+<label>Age in months <select id="weight-age"><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="12">12</option><option value="15">15</option><option value="18">18</option><option value="24">24</option><option value="26">26</option><option value="30">30</option><option value="36">36</option></select></label>
+<label>Sex <select id="weight-sex"><option value="F">Female</option><option value="M">Male</option></select></label>
+<label>Weight <input id="weight-value" type="number" min="0.1" step="0.1" value="54"></label>
+<label>Unit <select id="weight-unit"><option value="lb">lb</option><option value="kg">kg</option></select></label>
+<label style="display:block"><input id="weight-approx" type="checkbox"> Include reports with approximate ages or weights</label>
+<button id="weight-compare" type="button">Compare with the reports</button><p id="weight-result" role="status" aria-live="polite">Select your inputs and press Compare.</p>
+<noscript>The tables below contain the complete dataset and work without JavaScript.</noscript></section>
+<p>The useful question is whether two records are comparable: the same age, sex, units, and level of precision. Our <a href="/when-do-cane-corsos-stop-growing.html">Cane Corso growth timeline</a> covers the broader age question; the tables here focus on what owners actually wrote about weight.</p>
+<h2>What do the owner-reported weights actually show?</h2>
+<p>They show variation in a small, self-selected group, not the distribution of all Cane Corsos. A large number in a reply is evidence of a claim, not proof that the claim was measured accurately or independently verified.</p>
+<h3>Two discussions, different questions</h3>
+<p>Thread A begins with a female reported at 54 lb at four months and asks other owners to compare puppy and later weights. The <a href="https://www.reddit.com/r/CaneCorso/comments/1t7qw1y/found_out_she_weighs_54lbs_at_4_months_old/">original four-month discussion and its replies</a> supply both male and female examples. Thread B asks specifically about females at nine months; its replies naturally concentrate on that group. The <a href="https://www.reddit.com/r/CaneCorso/comments/1svvtsy/how_much_did_your_female_corso_weigh_at_nine/">female nine-month discussion</a> also contains several later measurements of the same dogs.</p>
+<p>That difference matters before calculating anything. More replies about females do not mean more female Corsos exist, and more nine-month measurements do not mean growth is more predictable then. They reflect the questions people were answering. We retained multiple ages from the same reply when the owner supplied them, so an observation count must never be presented as a count of independent dogs.</p>
+<h3>Thread A: reported observations</h3><table><thead><tr><th>Age (months)</th><th>Sex</th><th>Weight (lb)</th><th>Precision note / reply ID</th></tr></thead><tbody><tr><td>4</td><td>Female</td><td>54</td><td>As reported; OP</td></tr><tr><td>4</td><td>Female</td><td>56</td><td>about; oks9yys</td></tr><tr><td>4</td><td>Female</td><td>75</td><td>34 kg; owner supplied 75 lb; okrq83v</td></tr><tr><td>4</td><td>Male</td><td>45–50</td><td>As reported; okt0i22</td></tr><tr><td>4</td><td>Male</td><td>80</td><td>As reported; okrtuye</td></tr><tr><td>5</td><td>Female</td><td>45</td><td>almost 5 months; about; okzl7dc</td></tr><tr><td>6</td><td>Female</td><td>88</td><td>about; oks9yys</td></tr><tr><td>6</td><td>Male</td><td>76–80</td><td>a couple days over 6 months; okr1yet</td></tr><tr><td>6</td><td>Male</td><td>78</td><td>As reported; okr1gra</td></tr><tr><td>6</td><td>Male</td><td>90</td><td>6 months + 1 week; okqz4qh</td></tr><tr><td>7</td><td>Female</td><td>60</td><td>about 7 months; okqxvb0</td></tr><tr><td>7</td><td>Male</td><td>80</td><td>about 7 months; probably; okqxvb0</td></tr><tr><td>8</td><td>Male</td><td>80</td><td>about; okr61d3</td></tr><tr><td>9</td><td>Male</td><td>115</td><td>As reported; okt0i22</td></tr><tr><td>12</td><td>Male</td><td>110</td><td>As reported; ol06fxr</td></tr><tr><td>12</td><td>Male</td><td>123</td><td>As reported; okr1gra</td></tr><tr><td>12</td><td>Male</td><td>128</td><td>As reported; okzm2n8</td></tr><tr><td>18</td><td>Female</td><td>110</td><td>As reported; okzl7dc</td></tr></tbody></table><h3>Thread B: reported observations</h3><table><thead><tr><th>Age (months)</th><th>Sex</th><th>Weight (lb)</th><th>Precision note / reply ID</th></tr></thead><tbody><tr><td>7</td><td>Female</td><td>90</td><td>As reported; oijrjzo</td></tr><tr><td>9</td><td>Female</td><td>60</td><td>about; age and sex from question; oibnmct</td></tr><tr><td>9</td><td>Female</td><td>60</td><td>about; age from question; oint2u2</td></tr><tr><td>9</td><td>Female</td><td>72</td><td>age and sex from female-nine-month question; oidlqqh</td></tr><tr><td>9</td><td>Female</td><td>75–85</td><td>sex from question; oig15hm</td></tr><tr><td>9</td><td>Female</td><td>85</td><td>around; oibhu13</td></tr><tr><td>9</td><td>Female</td><td>85</td><td>As reported; oijixxd</td></tr><tr><td>9</td><td>Female</td><td>88</td><td>sex from question; oih33qd</td></tr><tr><td>9</td><td>Female</td><td>88</td><td>40 kg; sex from question; oiiuxt1</td></tr><tr><td>9</td><td>Female</td><td>89</td><td>As reported; oijye33</td></tr><tr><td>9</td><td>Female</td><td>90</td><td>sex from question; oicncbv</td></tr><tr><td>12</td><td>Female</td><td>90</td><td>As reported; oint2u2</td></tr><tr><td>15</td><td>Female</td><td>132</td><td>As reported; oijye33</td></tr><tr><td>24</td><td>Female</td><td>94</td><td>sex from female-nine-month question; oidlqqh</td></tr><tr><td>26</td><td>Female</td><td>117</td><td>weighed one month before age 27 months; oibhu13</td></tr><tr><td>30</td><td>Female</td><td>110</td><td>50 kg; sex from question; oiiuxt1</td></tr><tr><td>36</td><td>Female</td><td>120</td><td>As reported; oidh1fz</td></tr></tbody></table>
+<p>Reply IDs identify the records within each linked thread. The tables contain 35 observations from 26 dog records; one reply describing a male and female is treated as two dog records. Identity and pedigree remain unverified, including whether a dog appears elsewhere under another account. Statements in the female-only thread that answer the question without repeating sex are labeled as contextual rather than explicit.</p>
+<h2>How do these reports compare with breeder growth charts?</h2>
+<p>The reference charts use different formats: one gives pooled puppy ranges, while the other lists separate male and female values. Compare each chart on its own terms rather than averaging them into an apparently authoritative new chart.</p>
+<p><a href="https://royalcanecorso.com/blog/cane-corso-size-and-weight-chart">Royal Cane Corso Kennels’ published litter-based outline</a> gives 40–55 lb at four months, 60–80 lb at six months, 75–95 lb at nine months, and 85–105 lb at twelve months. It calls these typical ranges rather than targets. It does not publish a sample size or the underlying individual measurements, and its puppy ranges do not separate sexes.</p>
+<p>The <a href="https://www.ilcaneutile.it/tabella_di_crescita_del_cane_corso.html">Polisportiva Gli Angeli Custodi indicative growth table</a> separates females and males. It lists 16.5/18 kg at four months, 28/31.5 kg at six months, 38/42 kg at nine months, 43/47.5 kg at one year, and 45/50 kg at two years, in female/male order. Its page labels the table indicative but gives no sample size, collection dates, or statistical method. This is a training and breeding reference, not an independently sampled growth study.</p>
+<table><thead><tr><th>Age</th><th>Royal pooled range, lb</th><th>Italian table female / male, kg</th><th>Selected owner examples, lb</th></tr></thead><tbody>
+<tr><td>4 months</td><td>40–55</td><td>16.5 / 18</td><td>Female 54; male 45–50</td></tr>
+<tr><td>6 months</td><td>60–80</td><td>28 / 31.5</td><td>Female about 88; male 78</td></tr>
+<tr><td>9 months</td><td>75–95</td><td>38 / 42</td><td>Female 72, 88, 90; male 115</td></tr>
+<tr><td>12 months</td><td>85–105</td><td>43 / 47.5</td><td>Female 90; male 110, 123, 128</td></tr>
+<tr><td>24 months</td><td>No numeric puppy entry</td><td>45 / 50</td><td>Female 94</td></tr>
+</tbody></table>
+<h3>What a disagreement can establish</h3>
+<p>A reply outside a reference range establishes only that this reported value differs from that reference. It does not invalidate the chart, establish a new population average, or explain why the dog differs. These sources do not share a sampling method, and the chart authors provide too little information to test whether their dogs resemble the Reddit contributors’ dogs.</p>
+<p>Keep source units visible when auditing a number. The comparison table deliberately preserves kilograms for the Italian figures and pounds for the other sources. Converting a display can help comparison, but it cannot add precision to an estimated measurement. A rounded figure remains rounded after conversion.</p>
+<h2>Are male and female comparisons reliable at every age?</h2>
+<p>No: the coverage is too uneven to support a complete age-by-sex curve. Some groups have several replies, while others have one observation or none at all.</p>
+<h3>Same-age does not always mean identical age</h3>
+<p>A puppy described as almost five months is not exactly five months old, and six months plus a week is not the same timestamp as a sixth-month birthday. We keep these descriptions in the table instead of silently treating them as exact. The checker excludes approximate records by default; you can include them deliberately and see how the evidence group changes.</p>
+<p>Even a same-age comparison can mix current weights with recollections of puppyhood. The owner may remember a rounded number without a dated record. Another person may have just used a scale. Neither the table nor the checker can reconstruct that missing context. Read the precision note before interpreting a difference as meaningful.</p>
+<h3>Why we do not publish a population percentile</h3>
+<p>A percentile needs a defensible reference population and sampling process. These contributors volunteered replies to specific questions. Their posts are not a random survey, and a memorable large dog may attract more attention than an ordinary measurement. Ranking your dog against these anecdotes would give a precise-looking answer to a question the data cannot answer.</p>
+<h2>What can later weights tell you about adult size?</h2>
+<p>Paired observations describe individual changes, but they do not justify a universal puppy-to-adult multiplier. A later weight without a matching earlier record does not describe a growth rate at all.</p>
+<p>For example, one female reply reports 72 lb in response to the nine-month question and 94 lb at two years; another gives 89 lb at nine months and 132 lb at fifteen months. Those are different personal histories, not interchangeable prediction formulas. Both remain owner claims, and the underlying measurements were not observed by this site.</p>
+<p>A particularly important distinction is current age versus age at weighing. One contributor says the dog is twenty-seven months old now but was weighed a month earlier. The dataset places that measurement at twenty-six months. Likewise, a reply that gives an adult weight but no adult age cannot fill the three-year column just because the dog looks mature in a photograph.</p>
+<p>There is only a limited amount of later-age evidence here. The female reported at three years supplies a data point at that age; it does not establish that all females finish at that number or stop changing then. We do not create missing male three-year entries from unrelated adult claims.</p>
+<h2>How should you use the weight comparison checker?</h2>
+<p>Use it to find the observations behind a comparison, then read their notes. An empty result is useful information: it tells you that this dataset cannot answer that age-and-sex question.</p>
+<ol><li>Choose your dog’s age in months. If that age is absent, consult the tables rather than substitute a different age and treat it as equivalent.</li><li>Select male or female and enter the measured weight in pounds or kilograms. The tool converts kilograms for comparison, leaving the source records unchanged.</li><li>Start with approximate reports excluded. Enable them only if you want to compare against the broader, less precise group.</li><li>Read the number of included observations and their lowest and highest reported endpoints. A range entered by an owner stays a range.</li><li>Interpret “below,” “inside,” or “above” only as a comparison with these selected reports. None of those labels says what your dog should weigh.</li></ol>
+<p>The checker performs its arithmetic in your browser and does not save or send the inputs. It uses only the visible table records, with no hidden prediction model or invented intermediate ages. Repeated observations at different ages remain linked to their original replies in the accompanying evidence file.</p>
+<h2>A practical measurement log for everyday planning</h2>
+<p>A consistent personal record is easier to interpret than scattered comparisons with strangers’ dogs. Start a log that separates an actual reading from a remembered or estimated number.</p>
+<ul><li>Record the date, birth date or known age, sex, weight, and unit.</li><li>Note the scale and whether the reading was steady with the dog fully supported by the weighing platform.</li><li>Keep the original measurement rather than overwriting it with a converted and rounded value.</li><li>Mark estimates as estimates; leave a missing measurement blank.</li><li>Add length, height, and other item-specific measurements in separate columns when planning equipment.</li></ul>
+<p>Do not choose a crate from pounds alone. The <a href="/cane-corso-crate-size.html">Cane Corso crate-size guide</a> helps translate actual body dimensions into usable space. Similarly, <a href="/cane-corso-muzzle-training.html">basket-muzzle measurement and conditioning</a> requires snout measurements and an introduction routine, rather than a label such as “fits a heavy dog.” Those are different tasks from locating a weight in a table.</p>
+<p>For family planning, make the log readable by someone who did not take the measurement. “Weight today” without a date or unit becomes ambiguous surprisingly quickly. A dated record also prevents a puppy measurement from being repeated later as if it were current.</p>
+<h2>Common mistakes when comparing Cane Corso weights</h2>
+<p>The biggest mistake is treating a collection of anecdotes as a prescription. The next is hiding uncertainty while combining sources that measure different things.</p>
+<h3>Counting replies as dogs</h3><p>A single owner can describe two dogs, and one dog can contribute more than one age. Counting every number as an independent animal exaggerates the sample. Our observation count describes table rows; the smaller dog-record count describes distinct reply-and-sex records, with identity limitations stated above.</p>
+<h3>Borrowing missing details</h3><p>Do not infer sex from a dog’s name, infer age from a photograph, or assign a measurement to today because the owner used present tense elsewhere. This comparison uses the female question’s context only where the reply clearly answers it, and labels that choice. An explicit contradictory detail would take priority over thread context.</p>
+<h3>Promoting a prediction into a measurement</h3><p>“I think she will reach” is a forecast. “She weighed” is a report. The tables exclude forecasts, unknown-age adult weights, obvious jokes, and disclosed mixes from the comparison. Owner claims about pedigree still remain unverified; excluding declared mixes does not prove that every remaining dog has documented ancestry.</p>
+<h2>Frequently asked questions</h2>
+<details><summary>How much does a four-month-old Cane Corso weigh?</summary><p>The selected owner reports include females at 54, about 56, and 75 lb, and males at 45–50 and 80 lb. These are a small convenience sample, not a recommended range. The unusually wide spread is a reason to check the source and measurement rather than choose a target from the heaviest reply.</p></details><details><summary>Are male and female weights interchangeable?</summary><p>Keep them separate when a source provides separate values. The Italian reference table lists different male and female figures, whereas the Royal puppy chart pools sexes. Our owner dataset also has many more female observations, so its pooled numbers would give a misleading comparison.</p></details><details><summary>Can the calculator predict my puppy’s adult weight?</summary><p>No. It compares the entered weight with observations in this article at the selected age and sex. It does not fit a growth curve, estimate an adult weight, calculate a population percentile, or tell you what your dog should weigh.</p></details><details><summary>Why are some ages missing?</summary><p>An empty age-sex group means no qualifying report was included, not that a dog cannot weigh that amount. We did not fill gaps with invented values or interpolate between different dogs. Several replies lacked an age, a sex, or a usable measurement.</p></details><details><summary>Does a three-year-old report prove when growth stops?</summary><p>No. A measurement at three years describes that dog at that time. It does not show when the dog reached that weight. Establishing a stopping point requires repeated measurements of the same dog, with dates and a consistent weighing method.</p></details><details><summary>Should I buy equipment from a weight table?</summary><p>Use the measurements required by that exact item. Weight alone does not give body length, standing height, or muzzle dimensions. Keep a separate measurement log and use the appropriate fitting guide rather than converting pounds into a universal size.</p></details>
+<h2>Use the reports as context, not a target</h2>
+<p>Cane Corso weight by age is more useful when you can see where every number came from. Keep male and female reports separate, preserve the source units and approximate wording, and use your own dated measurements for practical planning. The gaps in these tables are part of the finding; they should not be disguised by a smooth prediction curve.</p>
+<p class="ai-note"><strong>Written by Marco Bellini.</strong> Prepared with AI assistance from the linked sources. Owner reports are unverified personal accounts; this comparison does not establish recommended weights.</p>
+</article>
+
+  <aside class="sidebar" data-follow-sidebar="existing"><section class="sidebar-panel"><h3>About this site</h3><p>Marco Bellini writes about cane corso temperament, giant-breed health and responsible ownership.</p><p><a href="/about.html">More about us</a></p></section>
+  </aside>
+</div>
+
+
+<script>
+(function() {
+  var _ga4 = "";
+  var _site = "cane-corso-world.github.io";
+  var _article = "cane-corso-weight-age";
+  var _startTime = Date.now();
+  var _scrollMarks = {25: false, 50: false, 75: false, 100: false};
+
+  function _send(name, params) {
+    var data = Object.assign({page: _article, site: _site}, params);
+    if (_ga4 && typeof gtag === "function") {
+      gtag("event", name, data);
+    }
+    try {
+      var log = JSON.parse(localStorage.getItem("_ptrack") || "[]");
+      log.push({t: new Date().toISOString(), e: name, d: data});
+      if (log.length > 200) log = log.slice(-200);
+      localStorage.setItem("_ptrack", JSON.stringify(log));
+    } catch(e) {}
+  }
+
+  // Scroll depth
+  function _onScroll() {
+    var scrolled = window.scrollY + window.innerHeight;
+    var total = document.documentElement.scrollHeight;
+    var pct = Math.round((scrolled / total) * 100);
+    [25, 50, 75, 100].forEach(function(mark) {
+      if (!_scrollMarks[mark] && pct >= mark) {
+        _scrollMarks[mark] = true;
+        _send("scroll_depth", {depth: mark});
+      }
+    });
+  }
+  window.addEventListener("scroll", _onScroll, {passive: true});
+
+  // Time on page
+  function _sendTime() {
+    var secs = Math.round((Date.now() - _startTime) / 1000);
+    _send("time_on_page", {seconds: secs});
+  }
+  document.addEventListener("visibilitychange", function() {
+    if (document.hidden) _sendTime();
+  });
+  window.addEventListener("pagehide", _sendTime);
+
+  // Newsletter CTA
+  document.addEventListener("click", function(e) {
+    var btn = e.target.closest("button");
+    if (btn) {
+      var box = btn.closest(".sidebar-newsletter, [class*='newsletter']");
+      if (box) _send("newsletter_click", {label: btn.textContent.trim().slice(0, 40)});
+    }
+    var link = e.target.closest("a[href]");
+    if (link && !link.href.includes(window.location.hostname)) {
+      _send("outbound_click", {url: link.href.slice(0, 100)});
+    }
+  });
+
+  // Pageview
+  _send("article_view", {});
+})();
+</script>
+
+
+
+
+
+<script>
+(function(){
+const records=[{"age": 4, "sex": "F", "low": 54, "high": 54, "approx": false}, {"age": 6, "sex": "M", "low": 76, "high": 80, "approx": true}, {"age": 8, "sex": "M", "low": 80, "high": 80, "approx": true}, {"age": 7, "sex": "M", "low": 80, "high": 80, "approx": true}, {"age": 7, "sex": "F", "low": 60, "high": 60, "approx": true}, {"age": 6, "sex": "M", "low": 90, "high": 90, "approx": true}, {"age": 4, "sex": "F", "low": 56, "high": 56, "approx": true}, {"age": 6, "sex": "F", "low": 88, "high": 88, "approx": true}, {"age": 4, "sex": "M", "low": 45, "high": 50, "approx": false}, {"age": 9, "sex": "M", "low": 115, "high": 115, "approx": false}, {"age": 5, "sex": "F", "low": 45, "high": 45, "approx": true}, {"age": 18, "sex": "F", "low": 110, "high": 110, "approx": false}, {"age": 12, "sex": "M", "low": 128, "high": 128, "approx": false}, {"age": 12, "sex": "M", "low": 110, "high": 110, "approx": false}, {"age": 6, "sex": "M", "low": 78, "high": 78, "approx": false}, {"age": 12, "sex": "M", "low": 123, "high": 123, "approx": false}, {"age": 4, "sex": "F", "low": 75, "high": 75, "approx": false}, {"age": 4, "sex": "M", "low": 80, "high": 80, "approx": false}, {"age": 9, "sex": "F", "low": 85, "high": 85, "approx": true}, {"age": 26, "sex": "F", "low": 117, "high": 117, "approx": false}, {"age": 9, "sex": "F", "low": 72, "high": 72, "approx": false}, {"age": 24, "sex": "F", "low": 94, "high": 94, "approx": false}, {"age": 9, "sex": "F", "low": 60, "high": 60, "approx": true}, {"age": 36, "sex": "F", "low": 120, "high": 120, "approx": false}, {"age": 7, "sex": "F", "low": 90, "high": 90, "approx": false}, {"age": 9, "sex": "F", "low": 90, "high": 90, "approx": false}, {"age": 9, "sex": "F", "low": 75, "high": 85, "approx": false}, {"age": 9, "sex": "F", "low": 88, "high": 88, "approx": false}, {"age": 9, "sex": "F", "low": 88.1849, "high": 88.1849, "approx": false}, {"age": 30, "sex": "F", "low": 110.2311, "high": 110.2311, "approx": false}, {"age": 9, "sex": "F", "low": 85, "high": 85, "approx": false}, {"age": 9, "sex": "F", "low": 89, "high": 89, "approx": false}, {"age": 15, "sex": "F", "low": 132, "high": 132, "approx": false}, {"age": 9, "sex": "F", "low": 60, "high": 60, "approx": true}, {"age": 12, "sex": "F", "low": 90, "high": 90, "approx": false}];
+function compareWeight(age,sex,weight,unit,approx){
+ if(!Number.isFinite(weight)||weight<=0)return 'Enter a positive measured weight.';
+ const chosen=records.filter(r=>r.age===age&&r.sex===sex&&(approx||!r.approx));
+ if(!chosen.length)return 'No comparable observations in this dataset. Try the approximation option or read the source tables. No weight prediction is available.';
+ const lb=unit==='kg'?weight*2.20462262185:weight;
+ const low=Math.min(...chosen.map(r=>r.low)),high=Math.max(...chosen.map(r=>r.high));
+ const relation=lb<low?'below':lb>high?'above':'inside';
+ return chosen.length+' observation(s); reported endpoints '+low.toFixed(1)+'–'+high.toFixed(1)+' lb. Your entry is '+relation+' those endpoints. This is not a recommended range or a population percentile.';
+}
+function run(){document.getElementById('weight-result').textContent=compareWeight(Number(document.getElementById('weight-age').value),document.getElementById('weight-sex').value,Number(document.getElementById('weight-value').value),document.getElementById('weight-unit').value,document.getElementById('weight-approx').checked);}
+document.getElementById('weight-compare').addEventListener('click',run);
+window.corsoWeightCompare=compareWeight;
+})();</script><footer class="sc-footer">
+  <div class="sc-footer-nav">
+    <a href="/">Home</a>
+    <a href="/blog.html">Blog</a>
+    <a href="/about.html">About</a>
+    <a href="/contact.html">Contact</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/sitemap.html">Sitemap</a>
+  </div>
+  <p>&copy; 2026 cane-corso-world.github.io &mdash; Cane Corso Guide. All rights reserved.</p>
+</footer>
+</body>
+</html>
